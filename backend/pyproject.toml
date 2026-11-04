@@ -1,0 +1,19 @@
+[project]
+name = "washvia"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Gabimaru0x1", email = "zubbypeculiar@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "flask>=3.1.3",
+]
+
+[project.scripts]
+washvia = "washvia:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
