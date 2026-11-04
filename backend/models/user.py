@@ -20,6 +20,7 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
     address = Column(String(256), nullable=True)
+    phone_number = Column(String(20), nullable=True)
     
     def __init__(self, *args, **kwargs):
         """Initialize a new User instance or restore its attributes from keyword arguments."""
