@@ -2,6 +2,7 @@
 """Provide a command-line interface for managing Washvia models."""
 
 import cmd
+import shlex
 from models import storage
 from models.user import User
 
@@ -29,21 +30,65 @@ class Console(cmd.Cmd):
         """Do nothing upon receiving an empty line."""
         pass
     
-    def do_create(self, cls_name):
-        """Create a new instance of a model class and save it to storage.
+    def do_create(self, arg):
+        """Create an instance using supplied attributes.
 
-        Usage: create <class_name>
+        Usage: create User email="gabi@example.com" first_name="Gabi"
         """
-        if not cls_name:
+        try:
+            args = shlex.split(arg)
+        except ValueError as error:
+            print(f"** invalid input: {error} **")
+            return
+
+        if not args:
             print("** class name missing **")
             return
-        try:
-            cls = globals()[cls_name]
-            obj = cls()
-            obj.save()
-            print(obj.id)
-        except KeyError:
+
+        classes = {"User": User}
+        cls_name = args[0]
+
+        if cls_name not in classes:
             print("** class doesn't exist **")
+            return
+
+        allowed_fields = {
+            "email",
+            "first_name",
+            "last_name",
+            "address",
+            "phone_number",
+            "password"
+        }
+        attributes = {}
+
+        for item in args[1:]:
+            if "=" not in item:
+                print(f"** expected key=value: {item} **")
+                return
+
+            key, value = item.split("=", 1)
+
+            if key not in allowed_fields:
+                print(f"** unsupported attribute: {key} **")
+                return
+
+            attributes[key] = value
+
+        if not attributes.get("email", "").strip():
+            print("** email is required **")
+            return
+        elif not attributes.get("password", "").strip():
+            print("** password is required **")
+            return
+
+        obj = classes[cls_name]()
+
+        for key, value in attributes.items():
+            setattr(obj, key, value)
+
+        obj.save()
+        print(obj.id)
     
     def do_show(self, cls_name):
         """Show the string representation of an instance based on class name and ID.
