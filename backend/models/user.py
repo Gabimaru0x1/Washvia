@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Define the User model for Washvia user accounts."""
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 
 class User(BaseModel, Base):
