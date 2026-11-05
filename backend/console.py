@@ -8,21 +8,22 @@ from models.user import User
 
 class Console(cmd.Cmd):
     """Handle commands to create, view, update, and delete model instances."""
-	intro = "Washvia console. Type help or ? to list commands."
-	prompt = "washvia> "
+    
+    intro = "Washvia console. Type help or ? to list commands."
+    prompt = "washvia> "
 
-	def do_exit(self, _arg):
-		"""Exit the console."""
-		return True
+    def do_exit(self, _arg):
+        """Exit the console."""
+        return True
 
-	def do_quit(self, arg):
-		"""Exit the console (alias for exit)."""
-		return self.do_exit(arg)
+    def do_quit(self, arg):
+        """Exit the console (alias for exit)."""
+        return self.do_exit(arg)
 
-	def do_EOF(self, arg):
-		"""Exit the console on end-of-file (Ctrl-D/Ctrl-Z)."""
-		print()
-		return self.do_exit(arg)
+    def do_EOF(self, arg):
+        """Exit the console on end-of-file (Ctrl-D/Ctrl-Z)."""
+        print()
+        return self.do_exit(arg)
 
     def emptyline(self):
         """Do nothing upon receiving an empty line."""
@@ -105,4 +106,4 @@ class Console(cmd.Cmd):
         print(obj_list)
 
 if __name__ == "__main__":
-	Console().cmdloop()
+    Console().cmdloop()
