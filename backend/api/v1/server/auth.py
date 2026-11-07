@@ -20,13 +20,11 @@ def signup():
     address = data.get('address')
     phone_number = data.get('phone_number')
 
-
-
     if not email or not password:
         return jsonify({'error': 'Missing required fields'}), 400
 
     user = User(email=email, password=password, first_name=first_name, last_name=last_name, address=address, phone_number=phone_number)
-    storage.save()
+    user.save()
 
     return jsonify({'message': 'User created successfully'}), 201
 

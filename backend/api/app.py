@@ -1,4 +1,4 @@
-from flask import flask
+from flask import Flask
 from api.v1.server import auth_bp
 
 
