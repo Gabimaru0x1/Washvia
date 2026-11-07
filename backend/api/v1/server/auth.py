@@ -21,12 +21,16 @@ def signup():
     phone_number = data.get('phone_number')
 
     if not email or not password:
-        return jsonify({'error': 'Missing required fields'}), 400
+        return jsonify({'error': 'Missing required fields'}), 
+    
+    existing_user = storage.get_by_email(User, email)
+    if existing_user:
+        return jsonify(message='User already exists'), 409
 
     user = User(email=email, password=password, first_name=first_name, last_name=last_name, address=address, phone_number=phone_number)
     user.save()
 
-    return jsonify({'message': 'User created successfully'}), 201
+    return jsonify({'message': 'User created successfully', 'user': data}), 201
 
 @auth_bp.route('/login/', methods=['POST'], strict_slashes=False)
 def login():
@@ -42,8 +46,8 @@ def login():
     if not email or not password:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    user = storage.get(User, email=email)
+    user = storage.get_by_email(User, email=email)
     if not user or user.password != password:
         return jsonify({'error': 'Invalid credentials'}), 401
 
-    return jsonify({'message': 'Login successful'}), 200
+    return jsonify({'message': 'Login successful', 'user': user.email}), 200
