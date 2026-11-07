@@ -99,6 +99,20 @@ class DBStorage:
             return None
         return self.__session.query(cls).get(id)
     
+    def get_by_email(self, cls, email):
+        """Retrieve an object based on its class and email.
+
+        Args:
+            cls: The class of the object to retrieve.
+            email: The email of the object to retrieve.
+
+        Returns:
+            The object if found, otherwise None.
+        """
+        if cls is None or email is None:
+            return None
+        return self.__session.query(cls).filter_by(email=email).first()
+    
     def count(self, cls=None):
         """Count the number of objects in the database.
 
