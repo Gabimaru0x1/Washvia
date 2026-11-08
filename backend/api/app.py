@@ -19,7 +19,7 @@ app.config.update(
     SECRET_KEY=os.environ["WASHVIA_SECRET_KEY"],
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=os.getenv("WASHVIA_COOKIE_SECURE") == "1",
+    SESSION_COOKIE_SECURE=True,
 )
 
 CSRFProtect(app)
