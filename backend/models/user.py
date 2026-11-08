@@ -3,6 +3,7 @@
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
+from flask_login import UserMixin
 
 class User(BaseModel, Base):
     """Represents a user account in the Washvia system.
