@@ -4,4 +4,4 @@ from . import dashboard_bp
 @dashboard_bp.route("/dashboard")
 @login_required
 def dashboard():
-	return f"Welcome, {current_user.email}!"
+	return f"Welcome, {current_user.email}!", 200
