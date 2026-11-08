@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 from api.v1.server import auth_bp
 from models.user import User
 from models import storage
-from api.v1.services.pass_hash import hash_password, check_password
+from api.v1.services.security import hash_password, check_password
 
 @auth_bp.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
