@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify
 from api.v1.server import auth_bp
 from models.user import User
 from models import storage
+from api.v1.services.pass_hash import hash_password, check_password
 
 @auth_bp.route('/signup/', methods=['POST'], strict_slashes=False)
 def signup():
@@ -26,9 +27,13 @@ def signup():
     existing_user = storage.get_by_email(User, email)
     if existing_user:
         return jsonify(message='User already exists'), 409
+    
+    hashed = hash_password(password)
 
-    user = User(email=email, password=password, first_name=first_name, last_name=last_name, address=address, phone_number=phone_number)
+    user = User(email=email, password=hashed, first_name=first_name, last_name=last_name, address=address, phone_number=phone_number)
     user.save()
+    
+    del data["password"]
 
     return jsonify({'message': 'User created successfully', 'user': data}), 201
 
@@ -47,7 +52,7 @@ def login():
         return jsonify({'error': 'Missing required fields'}), 400
 
     user = storage.get_by_email(User, email=email)
-    if not user or user.password != password:
+    if not user or not check_password(password, user.password):
         return jsonify({'error': 'Invalid credentials'}), 401
 
     return jsonify({'message': 'Login successful', 'user': user.email}), 200
