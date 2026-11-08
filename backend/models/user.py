@@ -5,7 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from flask_login import UserMixin
 
-class User(BaseModel, Base):
+class User(BaseModel, Base, UserMixin):
     """Represents a user account in the Washvia system.
 
     Attributes:
