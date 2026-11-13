@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+    /* --color-primary: #003A26; */
+    --color-primary: #223d3b;
+}
+
+@layer base {
+    body {
+        @apply px-13;
+    }
+}

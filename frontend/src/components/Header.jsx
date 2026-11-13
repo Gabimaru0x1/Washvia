@@ -1,17 +1,31 @@
+import ArrowButton from "./ArrowButton";
 
-
-function Header() {
+const Header = () => {
   return (
-    <header className='flex items-center justify-between p-4 bg-gray-800 text-white'>
-      <h3>Logo</h3>
+    <header className="py-8">
+      <nav className="flex justify-between items-center">
+        <a href="/">Washvia</a>
+        <ul className="flex space-x-10">
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/about">Services</a>
+          </li>
+          <li>
+            <a href="/contact">Pricing</a>
+          </li>
+          <li>
+            <a href="/contact">About</a>
+          </li>
+        </ul>
 
-      <nav className='flex space-x-4'>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
+        <ArrowButton >
+          Login
+        </ArrowButton>
       </nav>
     </header>
   );
-}
+};
 
 export default Header;
