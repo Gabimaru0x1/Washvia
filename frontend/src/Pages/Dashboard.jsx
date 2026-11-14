@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { logout } from "../services/authService.js";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null);
   const [status, setStatus] = useState("loading");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -20,9 +23,12 @@ export default function Dashboard() {
           return;
         }
 
-        if (!response.ok) throw new Error("Could not load profile");
+        if (!response.ok) {
+          throw new Error(`Could not load profile (HTTP ${response.status})`);
+        }
 
-        setProfile(await response.json());
+        const data = await response.json();
+        setProfile(data);
         setStatus("ready");
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -33,13 +39,49 @@ export default function Dashboard() {
     }
 
     void loadProfile();
+
     return () => controller.abort();
   }, []);
 
-  if (status === "signed-out") return <Navigate to="/login" replace />;
-  if (status === "loading") return <p>Loading your dashboard…</p>;
-  if (status === "error")
-    return <p>Could not load your dashboard. Try refreshing. {profile?.name}</p>;
+  async function handleLogout() {
+    setIsLoggingOut(true);
+    setLogoutError("");
 
-  return <h1>Welcome back, {profile.first_name}!</h1>;
+    try {
+      await logout();
+      setProfile(null);
+      setStatus("signed-out");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setLogoutError("Could not log out. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  }
+
+  if (status === "signed-out") {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (status === "loading") {
+    return <p>Loading your dashboard…</p>;
+  }
+
+  if (status === "error") {
+    return <p>Could not load your dashboard. Try refreshing.</p>;
+  }
+
+  const firstName = profile?.first_name?.trim();
+
+  return (
+    <>
+      <h1>{firstName ? `Welcome back, ${firstName}!` : "Welcome back!"}</h1>
+
+      <button type="button" onClick={handleLogout} disabled={isLoggingOut}>
+        {isLoggingOut ? "Logging out…" : "Log out"}
+      </button>
+
+      {logoutError && <p role="alert">{logoutError}</p>}
+    </>
+  );
 }
