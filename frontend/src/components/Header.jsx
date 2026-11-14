@@ -5,6 +5,7 @@ const Header = () => {
     <header className="py-8">
       <nav className="flex justify-between items-center">
         <a href="/">Washvia</a>
+
         <ul className="flex space-x-10">
           <li>
             <a href="/">Home</a>
@@ -20,7 +21,7 @@ const Header = () => {
           </li>
         </ul>
 
-        <ArrowButton >
+        <ArrowButton href="/signup">
           Login
         </ArrowButton>
       </nav>
