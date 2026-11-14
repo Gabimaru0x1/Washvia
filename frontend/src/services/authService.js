@@ -61,3 +61,19 @@ export async function login({ email, password }) {
     throw new Error(message);
   }
 }
+
+export async function logout() {
+  const csrfToken = await getCsrfToken();
+
+  const response = await fetch(`${AUTH_URL}/logout/`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not log out. Please try again.");
+  }
+}
