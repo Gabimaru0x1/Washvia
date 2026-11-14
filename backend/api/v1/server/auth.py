@@ -37,7 +37,7 @@ def signup():
     
     existing_user = storage.get_by_email(User, email)
     if existing_user:
-        return jsonify(message='User already exists'), 409
+        return jsonify(error='User already exists'), 409
     
     hashed = hash_password(password)
 
