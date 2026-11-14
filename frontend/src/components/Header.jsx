@@ -21,7 +21,7 @@ const Header = () => {
           </li>
         </ul>
 
-        <ArrowButton href="/signup">
+        <ArrowButton href="/login">
           Login
         </ArrowButton>
       </nav>
