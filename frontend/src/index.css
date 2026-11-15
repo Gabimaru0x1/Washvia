@@ -1,12 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-    /* --color-primary: #003A26; */
-    --color-primary: #223d3b;
+  /* --color-primary: #003A26; */
+  --color-primary: #223d3b;
 }
 
 @layer base {
-    body {
-        @apply px-13;
-    }
+  body {
+    @apply px-13;
+  }
+}
+
+@layer components {
+  .arrow-btn {
+    @apply inline-flex cursor-pointer items-center gap-5 rounded-full bg-primary py-2 pl-5 pr-2 text-white;
+  }
+
+  .arrow-bg {
+    @apply inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white;
+  }
 }
