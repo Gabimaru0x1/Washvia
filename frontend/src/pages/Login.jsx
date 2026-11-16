@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { login } from "../services/authService";
+import InputField from "../components/InputField";
+import WashStudio from "../assets/wash-studio.jpg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,44 +28,61 @@ const Login = () => {
   }
 
   return (
-    <main>
-      <h1>Log in to Washvia</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="block rounded border border-gray-500 bg-white px-3 py-2 text-black"
-            required
-          />
+    <main className="flex h-screen">
+      <div className="flex flex-col flex-1 w-full h-full justify-center items-center">
+        <div className="fixed top-0 left-0 bg-primary text-white rounded-full size-9 flex items-center justify-center m-8">
+          <p>X</p>
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="block rounded border border-gray-500 bg-white px-3 py-2 text-black"
-            required
-          />
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold">Log In</h1>
+          <p className="text-gray-400">or create an account</p>
         </div>
 
-        <button type="submit" disabled={isSubmitting} className="rounded bg-primary px-4 py-2 text-white">
-          {isSubmitting ? "Logging in…" : "Log in"}
-        </button>
+        <form onSubmit={handleSubmit} className="w-full max-w-[250px]">
+          <div className="space-y-3 mb-5">
+            <InputField
+              htmlFor="email"
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              placeholder="Email"
+            />
 
-        {error && <p role="alert">{error}</p>}
-      </form>
+            <InputField
+              htmlFor="password"
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              placeholder="Password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="rounded-full bg-primary px-4 w-full py-3 text-white mb-4"
+          >
+            {isSubmitting ? "Logging in…" : "Log in"}
+          </button>
+
+          <div className="text-center">
+            <p className="text-sm">Forgot password?</p>
+          </div>
+
+          {error && <p role="alert">{error}</p>}
+        </form>
+      </div>
+
+      <div className="w-full flex-2">
+        <img src={WashStudio} alt="" className="h-full object-cover" />
+      </div>
     </main>
   );
 };
