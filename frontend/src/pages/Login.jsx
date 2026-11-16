@@ -28,7 +28,7 @@ const Login = () => {
   }
 
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen font-outfit">
       <div className="flex flex-col flex-1 w-full h-full justify-center items-center">
         <div className="fixed top-0 left-0 bg-primary text-white rounded-full size-9 flex items-center justify-center m-8">
           <p>X</p>
