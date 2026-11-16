@@ -80,7 +80,7 @@ const Login = () => {
         </form>
       </div>
 
-      <div className="w-full flex-2">
+      <div className="hidden lg:block lg:w-full lg:flex-2">
         <img src={WashStudio} alt="" className="h-full object-cover" />
       </div>
     </main>
