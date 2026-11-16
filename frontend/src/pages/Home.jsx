@@ -9,7 +9,7 @@ const Home = () => {
       <main className="h-screen">
         <img src={HeroImg} alt="" className="absolute inset-0 z-0 h-full w-full object-cover" />
         {/* Dark Overlay */}
-        <div className="absolute inset-0 z-0 bg-black/50"></div>
+        <div className="absolute inset-0 z-0 bg-black/70"></div>
       </main>
     </>
   );
