@@ -39,7 +39,7 @@ const Login = () => {
           <p className="text-gray-400">or create an account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-[250px]">
+        <form onSubmit={handleSubmit} className="w-full max-w-[300px]">
           <div className="space-y-3 mb-5">
             <InputField
               htmlFor="email"
