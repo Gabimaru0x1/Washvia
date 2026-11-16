@@ -32,7 +32,7 @@ const Signup = () => {
   };
 
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen font-outfit">
       <div className="flex flex-col flex-1 w-full h-full justify-center items-center">
         <div className="fixed top-0 left-0 bg-primary text-white rounded-full size-9 flex items-center justify-center m-8">
           <p>X</p>
@@ -42,7 +42,7 @@ const Signup = () => {
           <p className="text-gray-400">or log in existing account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-[250px]">
+        <form onSubmit={handleSubmit} className="w-full max-w-[300px]">
           <div className="space-y-3 mb-5">
             <InputField
               htmlFor="email"
@@ -75,6 +75,17 @@ const Signup = () => {
               onChange={(event) => setPassword(event.target.value)}
               required
               placeholder="Password"
+            />
+
+            <InputField
+              htmlFor="password"
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              placeholder="Confirm password"
             />
           </div>
 
