@@ -1,112 +1,136 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { signup } from "../services/authService";
+import AuthFields from "../components/AuthFields";
 import InputField from "../components/InputField";
-import WashStudio from "../assets/wash-studio.jpg";
+import Button from "../components/Button";
 
-const Signup = () => {
+export default function Signup({ onClose, onSwitchMode }) {
+  const id = useId();
   const [email, setEmail] = useState("");
-  const [phone_number, setPhone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    if (isSubmitting) return;
+    if (isSubmitting || success) return;
 
     setError("");
-    setSuccess("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      await signup({ email, phone_number, password });
+      await signup({
+        email,
+        phone_number: phoneNumber,
+        password,
+      });
+
       setPassword("");
+      setConfirmPassword("");
       setSuccess("Account created. You can now log in.");
-    } catch (error) {
-      setError(error.message);
+    } catch (requestError) {
+      setError(requestError.message);
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   return (
-    <main className="flex h-screen font-outfit">
-      <div className="flex-center flex-col flex-1 w-full h-full">
-        <div className="fixed top-0 left-0 bg-primary text-white rounded-full size-9 flex-center m-8">
-          <p>X</p>
-        </div>
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold">Sign Up</h1>
-          <p className="text-gray-400">or log in existing account</p>
-        </div>
+    <section className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[70%] bg-white rounded-lg">
+      <Button
+        type="button"
+        onClick={onClose}
+        className="absolute right-9 top-5 gap-1"
+      >
+        <span className="text-2xl" aria-hidden="true">
+          ×
+        </span>
+        <span>Close</span>
+      </Button>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-[300px]">
-          <div className="space-y-3 mb-5">
-            <InputField
-              htmlFor="email"
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              placeholder="Email address"
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold">Sign Up</h1>
+      </div>
+
+      {success ? (
+        <p role="status" className="text-center text-sm">
+          {success}
+        </p>
+      ) : (
+        <form onSubmit={handleSubmit} className="mx-auto w-full max-w-xs">
+          <div className="mb-5 space-y-3">
+            <AuthFields
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              isSignup
             />
 
             <InputField
-              htmlFor="phone"
-              id="phone"
-              name="phone"
+              id={`${id}-phone`}
+              htmlFor={`${id}-phone`}
+              name="phone_number"
               type="tel"
-              value={phone_number}
-              onChange={(event) => setPhone(event.target.value)}
-              required
+              autoComplete="tel"
+              value={phoneNumber}
+              onChange={(event) => setPhoneNumber(event.target.value)}
               placeholder="Phone number"
+              required
             />
 
             <InputField
-              htmlFor="password"
-              id="password"
-              name="password"
+              id={`${id}-confirm-password`}
+              htmlFor={`${id}-confirm-password`}
+              name="confirmPassword"
               type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              placeholder="Password"
-            />
-
-            <InputField
-              htmlFor="password"
-              id="password"
-              name="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
               placeholder="Confirm password"
+              required
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-full bg-primary px-4 w-full py-3 text-white"
+            className="w-full bg-primary px-4 py-3 text-white"
           >
-            {isSubmitting ? "Creating account..." : "Create account"}
-          </button>
+            {isSubmitting ? "Creating account…" : "Create account"}
+          </Button>
 
-          {error && <p role="alert">{error}</p>}
-          {success && <output aria-live="polite">{success}</output>}
+          <div className="flex-center gap-1">
+            <p className="text-sm mt-5 text-gray-500">
+              Already have an account?
+            </p>
+            <Button
+              type="button"
+              onClick={onSwitchMode}
+              disabled={isSubmitting}
+              className="text-sm mt-5 text-gray-500 underline"
+            >
+              Log In
+            </Button>
+          </div>
+
+          {error && (
+            <p role="alert" className="mt-3 text-sm">
+              {error}
+            </p>
+          )}
         </form>
-      </div>
-
-      <div className="hidden lg:block lg:w-full lg:flex-2">
-        <img src={WashStudio} alt="" className="h-full object-cover" />
-      </div>
-    </main>
+      )}
+    </section>
   );
-};
-
-export default Signup;
+}
