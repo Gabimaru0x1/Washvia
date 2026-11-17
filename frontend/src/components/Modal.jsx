@@ -13,17 +13,13 @@ export function ModalProvider({ children, modals }) {
       {children}
 
       {renderModal && (
-        <Modal isVisible onClose={closeModal}>
-          {renderModal(closeModal)}
-        </Modal>
+        <Modal onClose={closeModal}>{renderModal(closeModal, openModal)}</Modal>
       )}
     </ModalContext.Provider>
   );
 }
 
-const Modal = ({ isVisible, onClose, children }) => {
-  if (!isVisible) return null;
-
+const Modal = ({ onClose, children }) => {
   const handleClose = (event) => {
     if (event.target === event.currentTarget) onClose();
   };
