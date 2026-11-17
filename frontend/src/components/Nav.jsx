@@ -1,7 +1,10 @@
 import ArrowButton from "./ArrowLink";
 import { navLinks } from "../constants";
+import { useModal } from "./modalContext";
 
 const Nav = () => {
+  const { openModal } = useModal();
+  
   return (
     <header className="py-8 px-13 absolute z-1 w-full">
       <nav className="flex items-center justify-between">
@@ -15,7 +18,7 @@ const Nav = () => {
           ))}
 
           <li>
-            <ArrowButton href="/login">Login</ArrowButton>
+            <ArrowButton onClick={() => openModal("login")}>Login</ArrowButton>
           </li>
         </ul>
       </nav>
