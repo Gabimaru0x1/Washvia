@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import InputField from "../components/InputField";
-import WashStudio from "../assets/wash-studio.jpg";
+import Button from "../components/Button";
 
-const Login = () => {
+const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,11 +28,15 @@ const Login = () => {
   }
 
   return (
-    <main className="flex h-screen font-outfit">
-      <div className="flex flex-col flex-1 w-full h-full justify-center items-center">
-        <div className="fixed top-0 left-0 bg-primary text-white rounded-full size-9 flex items-center justify-center m-8">
-          <p>X</p>
-        </div>
+      <main className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[70%] bg-white rounded-lg">
+        <Button
+          type="button"
+          onClick={onClose}
+          className="gap-1 absolute right-0 top-0 size-12 rounded-full my-3 mx-7"
+        >
+          <p className="text-2xl">×</p>
+          <p>Close</p>
+        </Button>
 
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold">Log In</h1>
@@ -64,13 +68,13 @@ const Login = () => {
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-full bg-primary px-4 w-full py-3 text-white mb-4"
+            className="bg-primary w-full text-white px-4 py-3 mb-4"
           >
             {isSubmitting ? "Logging in…" : "Log in"}
-          </button>
+          </Button>
 
           <div className="text-center">
             <p className="text-sm">Forgot password?</p>
@@ -78,12 +82,7 @@ const Login = () => {
 
           {error && <p role="alert">{error}</p>}
         </form>
-      </div>
-
-      <div className="hidden lg:block lg:w-full lg:flex-2">
-        <img src={WashStudio} alt="" className="h-full object-cover" />
-      </div>
-    </main>
+      </main>
   );
 };
 
