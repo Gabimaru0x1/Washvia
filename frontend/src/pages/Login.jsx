@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { login } from "../services/authService";
-import InputField from "../components/InputField";
+import AuthFields from "../components/AuthFields";
 import Button from "../components/Button";
 
-const Login = ({ onClose }) => {
+export default function Login({ onClose, onSwitchMode }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,62 +28,58 @@ const Login = ({ onClose }) => {
   }
 
   return (
-      <main className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[70%] bg-white rounded-lg">
-        <Button
-          type="button"
-          onClick={onClose}
-          className="gap-1 absolute right-0 top-0 size-12 rounded-full my-3 mx-7"
-        >
-          <p className="text-2xl">×</p>
-          <p>Close</p>
-        </Button>
+    <section className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[70%] bg-white rounded-lg">
+      <Button
+        type="button"
+        onClick={onClose}
+        className="absolute right-9 top-5 gap-1"
+      >
+        <span className="text-2xl" aria-hidden="true">
+          ×
+        </span>
+        <span>Close</span>
+      </Button>
 
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold">Log In</h1>
-          <p className="text-gray-400">or create an account</p>
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold">Log In</h1>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-xs">
+        <div className="mb-5 space-y-3">
+          <AuthFields
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-[300px]">
-          <div className="space-y-3 mb-5">
-            <InputField
-              htmlFor="email"
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              placeholder="Email"
-            />
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-primary px-4 py-3 text-white"
+        >
+          {isSubmitting ? "Logging in…" : "Log in"}
+        </Button>
 
-            <InputField
-              htmlFor="password"
-              id="password"
-              name="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              placeholder="Password"
-            />
-          </div>
-
+        <div className="flex-center gap-1">
+          <p className="text-sm mt-5 text-gray-500">Don't have an account?</p>
           <Button
-            type="submit"
+            type="button"
+            onClick={onSwitchMode}
             disabled={isSubmitting}
-            className="bg-primary w-full text-white px-4 py-3 mb-4"
+            className="text-sm mt-5 text-gray-500 underline"
           >
-            {isSubmitting ? "Logging in…" : "Log in"}
+            Sign Up
           </Button>
+        </div>
 
-          <div className="text-center">
-            <p className="text-sm">Forgot password?</p>
-          </div>
-
-          {error && <p role="alert">{error}</p>}
-        </form>
-      </main>
+        {error && (
+          <p role="alert" className="mt-3 text-sm">
+            {error}
+          </p>
+        )}
+      </form>
+    </section>
   );
-};
-
-export default Login;
+}
