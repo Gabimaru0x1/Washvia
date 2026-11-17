@@ -11,7 +11,7 @@
 
 @layer base {
   body {
-    @apply font-inter;
+    @apply font-outfit;
   }
 }
 
@@ -22,5 +22,9 @@
 
   .arrow-bg {
     @apply inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white;
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center
   }
 }
