@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import { FiPhone } from "react-icons/fi";
 import { signup } from "../services/authService";
 import AuthFields from "../components/AuthFields";
 import InputField from "../components/InputField";
@@ -10,9 +11,14 @@ export default function Signup({ onClose, onSwitchMode }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordsVisible, setPasswordsVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  function togglePasswords() {
+    setPasswordsVisible((visible) => !visible);
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -74,6 +80,8 @@ export default function Signup({ onClose, onSwitchMode }) {
               setEmail={setEmail}
               password={password}
               setPassword={setPassword}
+              passwordVisible={passwordsVisible}
+              onTogglePassword={togglePasswords}
               isSignup
             />
 
@@ -86,6 +94,7 @@ export default function Signup({ onClose, onSwitchMode }) {
               value={phoneNumber}
               onChange={(event) => setPhoneNumber(event.target.value)}
               placeholder="Phone number"
+              icon={FiPhone}
               required
             />
 
@@ -98,6 +107,8 @@ export default function Signup({ onClose, onSwitchMode }) {
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
               placeholder="Confirm password"
+              passwordVisible={passwordsVisible}
+              showPasswordToggle={false}
               required
             />
           </div>
@@ -110,20 +121,6 @@ export default function Signup({ onClose, onSwitchMode }) {
             {isSubmitting ? "Creating account…" : "Create account"}
           </Button>
 
-          <div className="flex-center gap-1">
-            <p className="text-sm mt-5 text-gray-500">
-              Already have an account?
-            </p>
-            <Button
-              type="button"
-              onClick={onSwitchMode}
-              disabled={isSubmitting}
-              className="text-sm mt-5 text-gray-500 underline"
-            >
-              Log In
-            </Button>
-          </div>
-
           {error && (
             <p role="alert" className="mt-3 text-sm">
               {error}
@@ -131,6 +128,18 @@ export default function Signup({ onClose, onSwitchMode }) {
           )}
         </form>
       )}
+
+      <div className="mt-5 flex-center gap-1">
+        <p className="text-sm text-gray-500">Already have an account?</p>
+        <Button
+          type="button"
+          onClick={onSwitchMode}
+          disabled={isSubmitting}
+          className="text-sm text-gray-500 underline"
+        >
+          Log In
+        </Button>
+      </div>
     </section>
   );
 }
