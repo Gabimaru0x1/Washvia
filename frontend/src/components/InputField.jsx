@@ -9,6 +9,7 @@ const InputField = ({
   type = "text",
   placeholder,
   icon,
+  error,
   passwordVisible,
   onTogglePassword,
   showPasswordToggle = true,
@@ -21,7 +22,15 @@ const InputField = ({
   const isVisible = passwordVisible ?? localPasswordVisible;
   const hasPasswordToggle = isPassword && showPasswordToggle;
   const Icon = icon ?? (isPassword ? FiLock : null);
+
   const label = children ?? placeholder;
+  const errorId = error && id ? `${id}-error` : undefined;
+  const describedBy =
+    [inputProps["aria-describedby"], errorId].filter(Boolean).join(" ") ||
+    undefined;
+
+  const leftPadding = Icon ? "pl-12" : "pl-5";
+  const rightPadding = hasPasswordToggle ? "pr-12" : "pr-5";
 
   function handleTogglePassword() {
     if (onTogglePassword) {
@@ -42,7 +51,20 @@ const InputField = ({
         </label>
       )}
 
-      <div className="relative">
+      {error && (
+        <p
+          id={errorId}
+          className={`pl-5 mb-1 text-[12px] font-medium text-red-700`}
+        >
+          {error}
+        </p>
+      )}
+
+      <div
+        className={`relative rounded-full border-2 bg-gray-100 ${
+          error ? "border-red-600" : "border-transparent focus-within:border-primary"
+        }`}
+      >
         {Icon && (
           <Icon
             aria-hidden="true"
@@ -55,9 +77,9 @@ const InputField = ({
           id={id}
           type={isPassword && isVisible ? "text" : type}
           placeholder={placeholder}
-          className={`block w-full rounded-full bg-gray-100 py-3 text-black ${
-            Icon ? "pl-12" : "pl-5"
-          } ${hasPasswordToggle ? "pr-12" : "pr-5"} ${className}`}
+          aria-invalid={error ? true : inputProps["aria-invalid"]}
+          aria-describedby={describedBy}
+          className={`block w-full rounded-full bg-transparent focus:outline-none py-3 text-black ${leftPadding} ${rightPadding} ${className}`}
         />
 
         {hasPasswordToggle && (
