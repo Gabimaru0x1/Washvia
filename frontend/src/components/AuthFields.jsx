@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { FiMail } from "react-icons/fi";
 import InputField from "./InputField";
 
 export default function AuthFields({
@@ -7,6 +8,10 @@ export default function AuthFields({
   password,
   setPassword,
   isSignup = false,
+  emailError,
+  passwordError,
+  passwordVisible,
+  onTogglePassword,
 }) {
   const id = useId();
 
@@ -21,6 +26,8 @@ export default function AuthFields({
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Email address"
+        icon={FiMail}
+        error={emailError}
         required
       />
 
@@ -33,6 +40,10 @@ export default function AuthFields({
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         placeholder="Password"
+        error={passwordError}
+        passwordVisible={passwordVisible}
+        onTogglePassword={onTogglePassword}
+        passwordToggleLabel={isSignup ? "both passwords" : "password"}
         required
       />
     </>
