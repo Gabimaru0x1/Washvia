@@ -2,12 +2,25 @@ import { useState } from "react";
 import { login } from "../services/authService";
 import AuthFields from "../components/AuthFields";
 import Button from "../components/Button";
+import { validateForm } from "../utils/validateForm";
 
 export default function Login({ onClose, onSwitchMode }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const passwordError =
+    password.length > 0 && password.length < 6
+      ? "Password must be at least 6 characters."
+      : "";
+
+  function handleFormChange(event) {
+    if (Object.keys(fieldErrors).length > 0) {
+      setFieldErrors(validateForm(event.currentTarget));
+    }
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -15,6 +28,12 @@ export default function Login({ onClose, onSwitchMode }) {
     if (isSubmitting) return;
 
     setError("");
+
+    const nextFieldErrors = validateForm(event.currentTarget);
+    setFieldErrors(nextFieldErrors);
+
+    if (Object.keys(nextFieldErrors).length > 0 || passwordError) return;
+
     setIsSubmitting(true);
 
     try {
@@ -40,17 +59,33 @@ export default function Login({ onClose, onSwitchMode }) {
         <span>Close</span>
       </Button>
 
-      <div className="mb-6 text-center">
+      <div className="relative w-full mb-6 text-center">
         <h1 className="text-2xl font-bold">Log In</h1>
+
+        {error && (
+          <p
+            role="alert"
+            className="absolute top-8 left-25 mb-3 text-red-500 text-[13px]"
+          >
+            {error}
+          </p>
+        )}
       </div>
 
-      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-xs">
+      <form
+        noValidate
+        onSubmit={handleSubmit}
+        onChange={handleFormChange}
+        className="mx-auto w-full max-w-xs"
+      >
         <div className="mb-5 space-y-3">
           <AuthFields
             email={email}
             setEmail={setEmail}
             password={password}
             setPassword={setPassword}
+            emailError={fieldErrors.email}
+            passwordError={fieldErrors.password || passwordError}
           />
         </div>
 
@@ -73,12 +108,6 @@ export default function Login({ onClose, onSwitchMode }) {
             Sign Up
           </Button>
         </div>
-
-        {error && (
-          <p role="alert" className="mt-3 text-sm">
-            {error}
-          </p>
-        )}
       </form>
     </section>
   );
