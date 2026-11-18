@@ -8,6 +8,8 @@ export default function AuthFields({
   password,
   setPassword,
   isSignup = false,
+  emailError,
+  passwordError,
   passwordVisible,
   onTogglePassword,
 }) {
@@ -25,6 +27,7 @@ export default function AuthFields({
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Email address"
         icon={FiMail}
+        error={emailError}
         required
       />
 
@@ -37,9 +40,10 @@ export default function AuthFields({
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         placeholder="Password"
+        error={passwordError}
         passwordVisible={passwordVisible}
         onTogglePassword={onTogglePassword}
-        passwordToggleLabel={onTogglePassword ? "both passwords" : "password"}
+        passwordToggleLabel={isSignup ? "both passwords" : "password"}
         required
       />
     </>
