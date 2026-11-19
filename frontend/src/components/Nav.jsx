@@ -15,6 +15,12 @@ const Nav = () => {
         <div className="md:hidden">
           <p className="text-white">Menu</p>
         </div>
+          Washvia
+        </a>
+
+        <div className="md:hidden">
+          <p className="text-white">Menu</p>
+        </div>
 
         <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
           {navLinks.map((item) => (
