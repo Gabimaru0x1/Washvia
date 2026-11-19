@@ -1,18 +1,18 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import ArrowRight from "./icons/ArrowRight";
 
-const ArrowButton = ({ children, href, className = "", ...linkProps }) => {
+const ArrowButton = ({ children, className = "", onClick, ...linkProps }) => {
   return (
-    <Link
+    <a
       {...linkProps}
-      to={href}
       className={`arrow-btn ${className}`}
+      onClick={onClick}
     >
       {children}
       <span className="arrow-bg">
         <ArrowRight />
       </span>
-    </Link>
+    </a>
   );
 };
 
