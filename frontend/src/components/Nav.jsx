@@ -4,11 +4,17 @@ import { useModal } from "./modalContext";
 
 const Nav = () => {
   const { openModal } = useModal();
-  
+
   return (
     <header className="py-8 px-13 absolute z-1 w-full">
       <nav className="flex items-center justify-between">
-        <a href="/" className="text-white">Washvia</a>
+        <a href="/" className="text-white">
+          Washvia
+        </a>
+
+        <div className="md:hidden">
+          <p className="text-white">Menu</p>
+        </div>
 
         <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
           {navLinks.map((item) => (
