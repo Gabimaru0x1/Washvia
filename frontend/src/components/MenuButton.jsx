@@ -9,12 +9,12 @@ const AnimatedHambugerButton = () => {
       <motion.button
         initial={false}
         onClick={() => setActive((pv) => !pv)}
-        className="relative cursor-pointer h-20 w-20 rounded-full bg-white/0 transition-colors hover:bg-white/20"
+        className="relative cursor-pointer h-15 w-15 rounded-full bg-white/0 transition-colors hover:bg-white/20"
         animate={active ? "open" : "closed"}
       >
         <motion.span
-          style={{ left: "50", top: "35%", x: "-50%", y: "-50%" }}
-          className="absolute h-1 w-10 bg-white"
+          style={{ left: "50%", top: "35%", x: "-50%", y: "-50%" }}
+          className="absolute h-1 w-8 bg-white rounded-full"
           variants={{
             open: {
               rotate: ["0deg", "0deg", "45deg"],
@@ -28,7 +28,7 @@ const AnimatedHambugerButton = () => {
         />
         <motion.span
           style={{ left: "50%", top: "50%", x: "-50%", y: "-50%" }}
-          className="absolute h-1 w-10 bg-white"
+          className="absolute h-1 w-8 bg-white rounded-full"
           variants={{
             open: {
               rotate: ["0deg", "0deg", "-45deg"],
@@ -40,12 +40,12 @@ const AnimatedHambugerButton = () => {
         />
         <motion.span
           style={{
-            left: "calc(50% + 10px)",
+            left: "calc(50% + 8px)",
             bottom: "35%",
             x: "-50%",
             y: "50%",
           }}
-          className="absolute h-1 w-5 bg-white"
+          className="absolute h-1 w-4 bg-white rounded-full"
           variants={{
             open: {
               rotate: ["0deg", "0deg", "45deg"],
@@ -54,7 +54,7 @@ const AnimatedHambugerButton = () => {
             },
             closed: {
               rotate: ["45deg", "0deg", "0deg"],
-              left: "calc(50% + 10px)",
+              left: "calc(50% + 8px)",
               bottom: ["50%", "50%", "35%"],
             },
           }}
