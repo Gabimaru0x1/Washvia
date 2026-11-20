@@ -1,6 +1,7 @@
 import ArrowButton from "./ArrowLink";
 import { navLinks } from "../constants";
 import { useModal } from "./modalContext";
+import AnimatedHambugerButton from "./MenuButton";
 
 const Nav = () => {
   const { openModal } = useModal();
@@ -12,9 +13,10 @@ const Nav = () => {
           Washvia
         </a>
 
-        <div className="md:hidden">
+        {/* <div className="md:hidden">
           <p className="text-white">Menu</p>
-        </div>
+        </div> */}
+        <AnimatedHambugerButton />
 
         <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
           {navLinks.map((item) => (
