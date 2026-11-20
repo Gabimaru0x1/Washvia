@@ -13,10 +13,9 @@ const Nav = () => {
           Washvia
         </a>
 
-        {/* <div className="md:hidden">
-          <p className="text-white">Menu</p>
-        </div> */}
-        <AnimatedHambugerButton />
+        <div className="-mr-[14px] md:hidden">
+          <AnimatedHambugerButton />
+        </div>
 
         <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
           {navLinks.map((item) => (
