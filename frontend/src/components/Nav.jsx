@@ -13,7 +13,7 @@ const Nav = () => {
           Washvia
         </a>
 
-        <div className="-mr-[14px] md:hidden">
+        <div className="-mr-3.5 md:hidden">
           <AnimatedHambugerButton />
         </div>
 
