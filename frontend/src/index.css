@@ -27,4 +27,8 @@
   .flex-center {
     @apply flex justify-center items-center
   }
+
+  .menu-btn {
+    @apply absolute h-0.75 bg-white rounded-full
+  }
 }
