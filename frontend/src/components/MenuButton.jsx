@@ -1,13 +1,13 @@
 // import { useState } from "react";
 import { motion, MotionConfig } from "motion/react";
 
-const MenuButton = ({active, onToggle, className=""}) => {
+const MenuButton = ({ active, onToggle, className = "" }) => {
   return (
     <MotionConfig transition={{ duration: 0.5, ease: "easeInOut" }}>
       <motion.button
         initial={false}
         onClick={onToggle}
-        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 ${className} relative z-10 md:hidden`}
+        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 z-10 md:hidden ${className}`}
         animate={active ? "open" : "closed"}
       >
         <motion.span
@@ -37,7 +37,12 @@ const MenuButton = ({active, onToggle, className=""}) => {
           }}
         />
         <motion.span
-          style={{ left: "calc(50% + 7px)", bottom: "35%", x: "-50%", y: "50%" }}
+          style={{
+            left: "calc(50% + 7px)",
+            bottom: "35%",
+            x: "-50%",
+            y: "50%",
+          }}
           className={`menu-btn w-3.5 ${className}`}
           variants={{
             open: {
