@@ -17,36 +17,37 @@ const Nav = () => {
   };
 
   return (
-    <header className="relative z-1">
-      <nav className="absolute inset-x-8 flex items-center justify-between">
-        <a href="/" onClick={closeMenu} className="z-10 text-primary">
-          Washvia
-        </a>
+    <nav className="fixed z-1 inset-x-8 flex items-center justify-between">
+      <a
+        href="/"
+        onClick={closeMenu}
+        className={`z-10 ${menuOpen ? "text-primary" : "text-white"}`}
+      >
+        Washvia
+      </a>
 
-        <div className="relative z-10 -mr-3.5 md:hidden">
-          <MenuButton
-            active={menuOpen}
-            onToggle={() => setMenuOpen((pv) => !pv)}
-          />
-        </div>
+      <MenuButton
+        active={menuOpen}
+        onToggle={() => setMenuOpen((pv) => !pv)}
+        className={`${menuOpen ? "bg-primary" : "bg-white"}`}
+      />
 
-        <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
-          {navLinks.map((item) => (
-            <li key={item.label}>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))}
-
-          <li>
-            <ArrowButton onClick={handleLogin}>Login</ArrowButton>
+      <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
+        {navLinks.map((item) => (
+          <li key={item.label}>
+            <a href={item.href}>{item.label}</a>
           </li>
-        </ul>
-      </nav>
+        ))}
+
+        <li>
+          <ArrowButton onClick={handleLogin}>Login</ArrowButton>
+        </li>
+      </ul>
 
       <AnimatePresence mode="wait">
         {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
       </AnimatePresence>
-    </header>
+    </nav>
   );
 };
 
