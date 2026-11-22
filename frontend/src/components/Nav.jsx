@@ -4,6 +4,7 @@ import { useModal } from "./modalContext";
 import MobileNav from "./MobileNav";
 import { useState } from "react";
 import MenuButton from "./MenuButton";
+import { AnimatePresence } from "motion/react";
 
 const Nav = () => {
   const { openModal } = useModal();
@@ -41,7 +42,10 @@ const Nav = () => {
           </li>
         </ul>
       </nav>
-      {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
+
+      <AnimatePresence mode="wait">
+        {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
+      </AnimatePresence>
     </header>
   );
 };
