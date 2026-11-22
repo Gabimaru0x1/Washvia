@@ -1,20 +1,32 @@
 import ArrowButton from "./ArrowLink";
 import { navLinks } from "../constants";
 import { useModal } from "./modalContext";
-import AnimatedHambugerButton from "./MenuButton";
+import MobileNav from "./MobileNav";
+import { useState } from "react";
+import MenuButton from "./MenuButton";
 
 const Nav = () => {
   const { openModal } = useModal();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
+
+  const handleLogin = () => {
+    closeMenu();
+    openModal("login");
+  };
 
   return (
-    <header className="py-8 px-13 absolute z-1 w-full">
-      <nav className="flex items-center justify-between">
-        <a href="/" className="text-white">
+    <header className="relative z-1">
+      <nav className="absolute inset-x-8 flex items-center justify-between">
+        <a href="/" onClick={closeMenu} className="z-10 text-primary">
           Washvia
         </a>
 
-        <div className="-mr-3.5 md:hidden">
-          <AnimatedHambugerButton />
+        <div className="relative z-10 -mr-3.5 md:hidden">
+          <MenuButton
+            active={menuOpen}
+            onToggle={() => setMenuOpen((pv) => !pv)}
+          />
         </div>
 
         <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
@@ -25,10 +37,11 @@ const Nav = () => {
           ))}
 
           <li>
-            <ArrowButton onClick={() => openModal("login")}>Login</ArrowButton>
+            <ArrowButton onClick={handleLogin}>Login</ArrowButton>
           </li>
         </ul>
       </nav>
+      {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
     </header>
   );
 };
