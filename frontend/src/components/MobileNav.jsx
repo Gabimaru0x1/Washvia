@@ -1,5 +1,5 @@
-import { navLinks } from "../constants";
 import { motion } from "motion/react";
+import { navLinks } from "../constants";
 
 const panelVariants = {
   hidden: { y: "-100%" },
