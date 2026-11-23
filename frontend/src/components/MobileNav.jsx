@@ -1,6 +1,5 @@
 import { navLinks } from "../constants";
-import ArrowButton from "./ArrowLink";
-import { motion, stagger } from "motion/react";
+import { motion } from "motion/react";
 
 const panelVariants = {
   hidden: { y: "-100%" },
@@ -16,7 +15,6 @@ const panelVariants = {
   exit: {
     y: "-100%",
     transition: {
-      delay: 0.4,
       ease: "easeIn",
       delay: 0.3,
       staggerChildren: 0.1,
@@ -25,39 +23,39 @@ const panelVariants = {
 };
 
 const linkVariants = {
-  hidden: { opacity: 0, x: 100 },
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
-    x: 0,
+    y: 0,
     transition: { duration: 0.25, ease: "easeOut" },
   },
   exit: {
     opacity: 0,
-    x: 100,
+    y: 30,
     transition: { duration: 0.25, ease: "easeOut" },
   },
 };
 
-const MobileNav = ({ onClose, onLogin }) => {
+const MobileNav = ({ onClose }) => {
   return (
     <motion.ul
       variants={panelVariants}
       initial="hidden"
       animate="show"
       exit="exit"
-      className="fixed inset-0 flex flex-col gap-3 overflow-y-auto bg-white px-8 pt-24 pb-8 text-gray-900 md:hidden"
+      className="fixed inset-0 flex flex-col items-center space-y-5 overflow-y-auto bg-white pt-24 text-gray-900 md:hidden"
     >
       {navLinks.map((item) => (
         <motion.li key={item.label} variants={linkVariants}>
-          <a href={item.href} onClick={onClose}>
+          <a
+            href={item.href}
+            onClick={onClose}
+            className="text-2xl font-medium"
+          >
             {item.label}
           </a>
         </motion.li>
       ))}
-
-      {/* <li>
-        <ArrowButton onClick={onLogin}>Login</ArrowButton>
-      </li> */}
     </motion.ul>
   );
 };

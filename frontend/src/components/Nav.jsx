@@ -50,7 +50,7 @@ const Nav = () => {
       </div>
 
       <AnimatePresence mode="wait">
-        {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
+        {menuOpen && <MobileNav onClose={closeMenu} />}
       </AnimatePresence>
     </nav>
   );
