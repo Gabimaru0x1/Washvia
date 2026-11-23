@@ -23,7 +23,7 @@ const MenuButton = ({ active, onToggle, className = "" }) => {
       <motion.button
         initial={false}
         onClick={handleToggle}
-        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 z-10 md:hidden ${className}`}
+        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 ${className}`}
         animate={active ? "open" : "closed"}
         disabled={isDisabled}
       >

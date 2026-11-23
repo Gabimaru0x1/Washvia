@@ -17,7 +17,7 @@ const Nav = () => {
   };
 
   return (
-    <nav className="fixed z-1 inset-x-4 h-20 flex items-center justify-between">
+    <nav className="fixed z-1 inset-x-4 py-5 flex items-center justify-between">
       <a
         href="/"
         onClick={closeMenu}
@@ -26,8 +26,8 @@ const Nav = () => {
         Washvia
       </a>
 
-      <div className="hidden md:flex gap-5 bg-white rounded-full py-1 pl-1 md:pl-5 pr-1">
-        <ul className="md:flex items-center gap-5">
+      <div className="hidden md:flex gap-5 bg-white rounded-full py-1 pl-5 pr-1">
+        <ul className="flex-center gap-5">
           {navLinks.map((item) => (
             <li key={item.label}>
               <a href={item.href}>{item.label}</a>
@@ -38,7 +38,7 @@ const Nav = () => {
         <ArrowButton onClick={handleLogin}>Login</ArrowButton>
       </div>
 
-      <div className="flex">
+      <div className="flex-center z-10 md:hidden">
         <ArrowButton onClick={handleLogin}>Login</ArrowButton>
 
         <MenuButton
