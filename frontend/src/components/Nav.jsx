@@ -9,19 +9,36 @@ import { AnimatePresence } from "motion/react";
 const Nav = () => {
   const { openModal } = useModal();
   const [menuOpen, setMenuOpen] = useState(false);
-  const closeMenu = () => setMenuOpen(false);
+  const [menuClosing, setMenuClosing] = useState(false);
+
+  const closeMenu = () => {
+    if (!menuOpen) return;
+
+    setMenuClosing(true);
+    setMenuOpen(false);
+  };
 
   const handleLogin = () => {
     closeMenu();
     openModal("login");
   };
 
+  const handleToggle = () => {
+    if (menuOpen) {
+      closeMenu()
+    } else {
+      setMenuOpen(true)
+    }
+  }
+
+  const usePrimaryColor = menuOpen || menuClosing;
+
   return (
     <nav className="fixed z-1 inset-x-4 py-5 flex items-center justify-between">
       <a
         href="/"
         onClick={closeMenu}
-        className={`z-10 ${menuOpen ? "text-primary" : "text-white"}`}
+        className={`z-10 ${usePrimaryColor ? "text-primary" : "text-white"}`}
       >
         Washvia
       </a>
@@ -43,13 +60,12 @@ const Nav = () => {
 
         <MenuButton
           active={menuOpen}
-          onToggle={() => setMenuOpen((pv) => !pv)}
-          className={`${menuOpen ? "bg-primary" : "bg-white"}`}
+          onToggle={handleToggle}
+          className={`${usePrimaryColor ? "bg-primary" : "bg-white"}`}
         />
-
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" onExitComplete={() => setMenuClosing(false)}>
         {menuOpen && <MobileNav onClose={closeMenu} />}
       </AnimatePresence>
     </nav>

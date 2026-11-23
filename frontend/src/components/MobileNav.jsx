@@ -43,7 +43,7 @@ const MobileNav = ({ onClose }) => {
       initial="hidden"
       animate="show"
       exit="exit"
-      className="fixed inset-0 flex flex-col items-center space-y-5 overflow-y-auto bg-white pt-24 text-gray-900 md:hidden"
+      className="fixed inset-0 flex flex-col items-center space-y-3 overflow-y-auto bg-white pt-24 text-gray-900 md:hidden"
     >
       {navLinks.map((item) => (
         <motion.li key={item.label} variants={linkVariants}>
