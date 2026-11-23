@@ -9,43 +9,64 @@ import { AnimatePresence } from "motion/react";
 const Nav = () => {
   const { openModal } = useModal();
   const [menuOpen, setMenuOpen] = useState(false);
-  const closeMenu = () => setMenuOpen(false);
+  const [menuClosing, setMenuClosing] = useState(false);
+
+  const closeMenu = () => {
+    if (!menuOpen) return;
+
+    setMenuClosing(true);
+    setMenuOpen(false);
+  };
 
   const handleLogin = () => {
     closeMenu();
     openModal("login");
   };
 
+  const handleToggle = () => {
+    if (menuOpen) {
+      closeMenu()
+    } else {
+      setMenuOpen(true)
+    }
+  }
+
+  const usePrimaryColor = menuOpen || menuClosing;
+
   return (
-    <nav className="fixed z-1 inset-x-8 flex items-center justify-between">
+    <nav className="fixed z-1 inset-x-4 py-5 flex items-center justify-between">
       <a
         href="/"
         onClick={closeMenu}
-        className={`z-10 ${menuOpen ? "text-primary" : "text-white"}`}
+        className={`z-10 ${usePrimaryColor ? "text-primary" : "text-white"}`}
       >
         Washvia
       </a>
 
-      <MenuButton
-        active={menuOpen}
-        onToggle={() => setMenuOpen((pv) => !pv)}
-        className={`${menuOpen ? "bg-primary" : "bg-white"}`}
-      />
+      <div className="hidden md:flex gap-5 bg-white rounded-full py-1 pl-5 pr-1">
+        <ul className="flex-center gap-5">
+          {navLinks.map((item) => (
+            <li key={item.label}>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
 
-      <ul className="hidden md:flex items-center gap-5 bg-white rounded-full py-1 pl-5 pr-1">
-        {navLinks.map((item) => (
-          <li key={item.label}>
-            <a href={item.href}>{item.label}</a>
-          </li>
-        ))}
+        <ArrowButton onClick={handleLogin}>Login</ArrowButton>
+      </div>
 
-        <li>
-          <ArrowButton onClick={handleLogin}>Login</ArrowButton>
-        </li>
-      </ul>
+      <div className="flex-center z-10 md:hidden">
+        <ArrowButton onClick={handleLogin}>Login</ArrowButton>
 
-      <AnimatePresence mode="wait">
-        {menuOpen && <MobileNav onLogin={handleLogin} onClose={closeMenu} />}
+        <MenuButton
+          active={menuOpen}
+          onToggle={handleToggle}
+          className={`${usePrimaryColor ? "bg-primary" : "bg-white"}`}
+        />
+      </div>
+
+      <AnimatePresence mode="wait" onExitComplete={() => setMenuClosing(false)}>
+        {menuOpen && <MobileNav onClose={closeMenu} />}
       </AnimatePresence>
     </nav>
   );

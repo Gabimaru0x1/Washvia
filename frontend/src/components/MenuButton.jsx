@@ -1,14 +1,31 @@
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, MotionConfig } from "motion/react";
 
 const MenuButton = ({ active, onToggle, className = "" }) => {
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!isDisabled) return;
+
+    const timer = setTimeout(() => setIsDisabled(false), 500);
+    return () => clearTimeout(timer);
+  }, [isDisabled]);
+
+  const handleToggle = () => {
+    if (isDisabled) return;
+
+    setIsDisabled(true);
+    onToggle();
+  };
+
   return (
     <MotionConfig transition={{ duration: 0.5, ease: "easeInOut" }}>
       <motion.button
         initial={false}
-        onClick={onToggle}
-        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 z-10 md:hidden ${className}`}
+        onClick={handleToggle}
+        className={`relative cursor-pointer h-11 w-11 rounded-full bg-white/0 transition-colors hover:bg-white/20 ${className}`}
         animate={active ? "open" : "closed"}
+        disabled={isDisabled}
       >
         <motion.span
           style={{ left: "50%", top: "35%", x: "-50%", y: "-50%" }}
