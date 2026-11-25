@@ -6,11 +6,12 @@ creation and update timestamps, and dictionary serialization.
 """
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
 
 class BaseModel:
     """Defines common attributes and methods inherited by Washvia models.
@@ -19,11 +20,20 @@ class BaseModel:
     and methods for saving and dictionary serialization.
     """
     id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
     def __init__(self, *args, **kwargs):
-        """Initialize a new instance or restore its attributes from keyword arguments."""
+        """Initialize a new instance or restore its attributes from keyword
+        arguments."""
         if kwargs:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
@@ -32,26 +42,28 @@ class BaseModel:
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
             if 'created_at' not in kwargs:
-                self.created_at = datetime.utcnow()
+                self.created_at = datetime.now(timezone.utc)
             if 'updated_at' not in kwargs:
-                self.updated_at = datetime.utcnow()
+                self.updated_at = datetime.now(timezone.utc)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
-            
+            self.created_at = datetime.now(timezone.utc)
+            self.updated_at = datetime.now(timezone.utc)
+
     def __str__(self):
-        """Return a string representation containing the class name, ID, and attributes."""
+        """Return a string representation containing the class name, ID,
+        and attributes."""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
-    
+
     def save(self):
-        """Update the modification timestamp and save the instance to storage."""
-        self.updated_at = datetime.utcnow()
-        
+        """Update the modification timestamp and save the instance to
+        storage."""
+        self.updated_at = datetime.now(timezone.utc)
+
         from models import storage
         storage.new(self)
         storage.save()
-        
+
     def to_dict(self):
         """Return a dictionary representation of the instance.
 
@@ -62,9 +74,8 @@ class BaseModel:
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
-    
+
     def delete(self):
         """Delete the instance from storage."""
         from models import storage
         storage.delete(self)
-        
