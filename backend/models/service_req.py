@@ -2,13 +2,14 @@
 """Defines the ServiceReq class."""
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
 class ServiceReq(BaseModel, Base):
     """Represents a user service request
-    
+
      Attributes:
             user_id (str): User's id who requested the service.
             service (str): Type of service requested.
@@ -19,13 +20,16 @@ class ServiceReq(BaseModel, Base):
 
     __tablename__ = 'service_req'
 
-    user_id = Column(String(60), nullable=False)
+    user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     service = Column(String(40), nullable=False)
     pickup_address = Column(String(128), nullable=False)
     status = Column(String(20), default="scheduled", nullable=False)
-    picked_up_on = Column(DateTime, default=datetime.utcnow, nullable=True)
-    delivered_on = Column(DateTime, default=datetime.utcnow, nullable=True)
+    picked_up_on = Column(DateTime, nullable=True)
+    delivered_on = Column(DateTime, nullable=True)
+    user = relationship("User", back_populates="service_requests")
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new User instance or restore its attributes from keyword arguments."""
+        """Initialize a User or restore its attributes from keyword
+        arguments.
+        """
         super().__init__(*args, **kwargs)
