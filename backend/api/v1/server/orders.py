@@ -21,7 +21,11 @@ def create_order():
     if not address:
         return jsonify({'error': 'Enter a pick up address'})
 
-    order = ServiceReq(user_id=user_id, service=service, pickup_address=address)
+    order = ServiceReq(
+        user_id=user_id,
+        service=service,
+        pickup_address=address
+    )
     order.save()
 
     return jsonify({
