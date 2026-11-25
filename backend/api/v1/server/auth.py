@@ -82,7 +82,13 @@ def login():
     session.clear()  # Clear the session to prevent session fixation attacks
     login_user(user)
 
-    return jsonify({'message': 'Login successful', 'user': user.email}), 200
+    response = jsonify({
+        'message': 'Login successful',
+        'user': user.email,
+        'csrf_token': generate_csrf(),
+    })
+
+    return response
 
 
 @auth_bp.route('/logout/', methods=['POST'], strict_slashes=False)
