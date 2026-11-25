@@ -1,12 +1,13 @@
 #!/usr/bin/python
 """This module defines the requested service routes for the Washvia API."""
-from flask import request, jsonify, url_for, redirect
+from flask import request, jsonify
 from flask_login import login_required, current_user
 from . import orders_bp
 from models.service_req import ServiceReq
 
 
 @orders_bp.route('/orders/', methods=['POST'], strict_slashes=False)
+@login_required
 def create_order():
     """Handle service requests by a user"""
     data = request.get_json()
