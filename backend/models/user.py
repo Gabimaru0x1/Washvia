@@ -3,7 +3,9 @@
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 from flask_login import UserMixin
+
 
 class User(BaseModel, Base, UserMixin):
     """Represents a user account in the Washvia system.
@@ -22,7 +24,8 @@ class User(BaseModel, Base, UserMixin):
     last_name = Column(String(128), nullable=True)
     address = Column(String(256), nullable=True)
     phone_number = Column(String(20), nullable=True)
-    
+    service_requests = relationship("ServiceReq", back_populates="user")
+
     def __init__(self, *args, **kwargs):
-        """Initialize a new User instance or restore its attributes from keyword arguments."""
+        """Initialize a User or restore attributes from keyword arguments."""
         super().__init__(*args, **kwargs)
