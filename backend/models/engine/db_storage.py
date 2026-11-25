@@ -4,9 +4,10 @@ SQLAlchemy.
 """
 
 from os import getenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
+from models.service_req import ServiceReq
 
 
 class DBStorage:
@@ -43,14 +44,17 @@ class DBStorage:
             <class name>.<object id>.
         """
         obj_dict = {}
+        session = self.__session
+        if session is None:
+            return obj_dict
         if cls is None:
             for subclass in Base.__subclasses__():
-                objs = self.__session.query(subclass).all()
+                objs = session.query(subclass).all()
                 for obj in objs:
                     key = f"{obj.__class__.__name__}.{obj.id}"
                     obj_dict[key] = obj
         else:
-            objs = self.__session.query(cls).all()
+            objs = session.query(cls).all()
             for obj in objs:
                 key = f"{obj.__class__.__name__}.{obj.id}"
                 obj_dict[key] = obj
@@ -62,11 +66,13 @@ class DBStorage:
         Args:
             obj: The object to add to the session.
         """
-        self.__session.add(obj)
+        if self.__session is not None:
+            self.__session.add(obj)
 
     def save(self):
         """Commit all changes made in the current database session."""
-        self.__session.commit()
+        if self.__session is not None:
+            self.__session.commit()
 
     def delete(self, obj=None):
         """Delete an object from the current database session.
@@ -74,7 +80,7 @@ class DBStorage:
         Args:
             obj: The object to delete. If None, do nothing.
         """
-        if obj is not None:
+        if obj is not None and self.__session is not None:
             self.__session.delete(obj)
 
     def reload(self):
@@ -84,12 +90,13 @@ class DBStorage:
         session_factory = sessionmaker(
             bind=self.__engine, expire_on_commit=False
         )
-        Session = scoped_session(session_factory)
-        self.__session = Session()
+        session = scoped_session(session_factory)
+        self.__session = session()
 
     def close(self):
         """Close the current database session."""
-        self.__session.close()
+        if self.__session is not None:
+            self.__session.close()
 
     def get(self, cls, id):
         """Retrieve an object based on its class and ID.
@@ -101,7 +108,7 @@ class DBStorage:
         Returns:
             The object if found, otherwise None.
         """
-        if cls is None or id is None:
+        if cls is None or id is None or self.__session is None:
             return None
         return self.__session.query(cls).get(id)
 
@@ -115,7 +122,7 @@ class DBStorage:
         Returns:
             The object if found, otherwise None.
         """
-        if cls is None or email is None:
+        if cls is None or email is None or self.__session is None:
             return None
         return self.__session.query(cls).filter_by(email=email).first()
 
@@ -128,6 +135,24 @@ class DBStorage:
         Returns:
             The number of objects in the database.
         """
+        session = self.__session
+        if session is None:
+            return 0
         if cls is None:
-            return self.__session.query(Base).count()
-        return self.__session.query(cls).count()
+            return session.query(Base).count()
+        return session.query(cls).count()
+
+    def get_orders_for_user(self, user_id):
+        """Return a customer's orders, newest first."""
+        session = self.__session
+        if session is None:
+            return []
+        return (
+            session.query(ServiceReq)
+            .filter_by(user_id=user_id)
+            .order_by(
+                ServiceReq.__table__.c.created_at.desc(),
+                ServiceReq.__table__.c.id.desc(),
+            )
+            .all()
+        )
