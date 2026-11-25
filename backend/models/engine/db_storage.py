@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module defines the database storage engine for Washvia using SQLAlchemy."""
+"""This module defines the database storage engine for Washvia using
+SQLAlchemy.
+"""
 
 from os import getenv
 from sqlalchemy import create_engine
@@ -10,8 +12,8 @@ from models.base_model import Base
 class DBStorage:
     """Database storage engine for Washvia using SQLAlchemy.
 
-    This class manages the connection to the database, handles sessions, and provides methods
-    for interacting with the database.
+    This class manages the connection to the database, handles sessions, and
+    provides methods for interacting with the database.
 
     Attributes:
         __engine: The SQLAlchemy engine instance.
@@ -27,8 +29,9 @@ class DBStorage:
         password = getenv('WASHVIA_MYSQL_PWD')
         host = getenv('WASHVIA_MYSQL_HOST')
         db_name = getenv('WASHVIA_MYSQL_DB')
-        self.__engine = create_engine(f'mysql+mysqldb://{user}:{password}@{host}/{db_name}', pool_pre_ping=True)
-        
+        connection_url = f'mysql+mysqldb://{user}:{password}@{host}/{db_name}'
+        self.__engine = create_engine(connection_url, pool_pre_ping=True)
+
     def all(self, cls=None):
         """Query all objects of a given class from the database.
 
@@ -36,7 +39,8 @@ class DBStorage:
             cls: The class of objects to query. If None, query all classes.
 
         Returns:
-            A dictionary of objects with keys in the format <class name>.<object id>.
+            A dictionary of objects with keys in the format
+            <class name>.<object id>.
         """
         obj_dict = {}
         if cls is None:
@@ -51,7 +55,7 @@ class DBStorage:
                 key = f"{obj.__class__.__name__}.{obj.id}"
                 obj_dict[key] = obj
         return obj_dict
-    
+
     def new(self, obj):
         """Add a new object to the current database session.
 
@@ -59,11 +63,11 @@ class DBStorage:
             obj: The object to add to the session.
         """
         self.__session.add(obj)
-        
+
     def save(self):
         """Commit all changes made in the current database session."""
         self.__session.commit()
-        
+
     def delete(self, obj=None):
         """Delete an object from the current database session.
 
@@ -72,18 +76,21 @@ class DBStorage:
         """
         if obj is not None:
             self.__session.delete(obj)
-    
+
     def reload(self):
-        """Reload the database session and create all tables in the database."""
+        """Reload the database session and create all tables in the
+        database."""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+            bind=self.__engine, expire_on_commit=False
+        )
         Session = scoped_session(session_factory)
         self.__session = Session()
-        
+
     def close(self):
         """Close the current database session."""
         self.__session.close()
-        
+
     def get(self, cls, id):
         """Retrieve an object based on its class and ID.
 
@@ -97,7 +104,7 @@ class DBStorage:
         if cls is None or id is None:
             return None
         return self.__session.query(cls).get(id)
-    
+
     def get_by_email(self, cls, email):
         """Retrieve an object based on its class and email.
 
@@ -111,7 +118,7 @@ class DBStorage:
         if cls is None or email is None:
             return None
         return self.__session.query(cls).filter_by(email=email).first()
-    
+
     def count(self, cls=None):
         """Count the number of objects in the database.
 
