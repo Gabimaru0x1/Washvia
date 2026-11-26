@@ -6,4 +6,4 @@ from . import dashboard_bp
 @dashboard_bp.route("/dashboard")
 @login_required
 def dashboard():
-    return jsonify({"first_name": current_user.email})
+    return jsonify({"first_name": current_user.first_name})
