@@ -22,7 +22,7 @@ def signup():
     """Handle signup requests and create a Washvia user account."""
     if current_user.is_authenticated:
         # Redirect to a dashboard or home page if already logged in.
-        return redirect(url_for('dashboard_bp.dashboard'))
+        return redirect(url_for('dashboard.dashboard'))
 
     data = request.get_json()
     if not data:
@@ -34,6 +34,7 @@ def signup():
     last_name = data.get('last_name')
     address = data.get('address')
     phone_number = data.get('phone_number')
+    role = data.get('role')
 
     if not email or not password:
         return jsonify({'error': 'Missing required fields'}), 400
@@ -51,6 +52,7 @@ def signup():
         last_name=last_name,
         address=address,
         phone_number=phone_number,
+        role=role
     )
     user.save()
 
@@ -63,8 +65,7 @@ def signup():
 def login():
     """Handle login requests and authenticate a Washvia user."""
     if current_user.is_authenticated:
-        return jsonify(error="You are already logged in"), 409
-
+        return redirect(url_for('dashboard.dashboard'))
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No data provided'}), 400
