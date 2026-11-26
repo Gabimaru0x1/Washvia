@@ -41,7 +41,6 @@ def create_order():
     user_id = current_user.id
     service = data.get("service")
     address = data.get("pickup_address")
-    status = AWAITING_PICKUP_STATUS
 
     if not address:
         return jsonify({'error': 'Enter a pick up address'}), 400
@@ -50,7 +49,7 @@ def create_order():
         user_id=user_id,
         service=service,
         pickup_address=address,
-        status=status
+        status=AWAITING_PICKUP_STATUS
     )
     order.save()
 
@@ -207,6 +206,7 @@ def service_delivered(order_id):
         ), 409
 
     order.status = "Delivered"
+    order.delivered_on = datetime.now(timezone.utc).replace(tzinfo=None)
     order.save()
 
     return jsonify(order_response(order)), 200
