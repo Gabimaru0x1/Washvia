@@ -25,6 +25,7 @@ class User(BaseModel, Base, UserMixin):
     address = Column(String(256), nullable=True)
     phone_number = Column(String(20), nullable=True)
     service_requests = relationship("ServiceReq", back_populates="user")
+    role = Column(String(20), nullable=False, server_default="customer")
 
     def __init__(self, *args, **kwargs):
         """Initialize a User or restore attributes from keyword arguments."""
