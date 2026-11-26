@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 """This module defines the authentication routes for the Washvia API."""
-from typing import cast
-
 from flask import request, jsonify, session, url_for, redirect
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import generate_csrf
@@ -79,7 +77,7 @@ def login():
         return jsonify({'error': 'Missing required fields'}), 400
 
     user = storage.get_by_email(User, email=email)
-    if not user or not check_password(password, cast(str, user.password)):
+    if not user or not check_password(password, user.password):
         return jsonify({'error': 'Invalid credentials'}), 401
 
     session.clear()  # Clear the session to prevent session fixation attacks
