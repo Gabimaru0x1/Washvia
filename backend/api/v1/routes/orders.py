@@ -10,6 +10,7 @@ from datetime import date, datetime, timezone
 
 ADMIN_ACCESS_ERROR = "Admin access required."
 ORDER_NOT_FOUND_ERROR = "Order not found."
+AWAITING_PICKUP_STATUS = "Awaiting pickup"
 
 
 def order_response(order):
@@ -40,10 +41,10 @@ def create_order():
     user_id = current_user.id
     service = data.get("service")
     address = data.get("pickup_address")
-    status = "Awaiting pickup"
+    status = AWAITING_PICKUP_STATUS
 
     if not address:
-        return jsonify({'error': 'Enter a pick up address'})
+        return jsonify({'error': 'Enter a pick up address'}), 400
 
     order = Order(
         user_id=user_id,
@@ -103,7 +104,7 @@ def mark_order_picked_up(order_id):
     if order is None:
         return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
 
-    if order.status != "Awaiting pickup":
+    if order.status != AWAITING_PICKUP_STATUS:
         return jsonify(
             error="Only orders awaiting pickup can be marked picked up."
         ), 409
@@ -225,8 +226,10 @@ def cancel_order(order_id):
     if order is None:
         return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
 
-    if order.status != "scheduled":
-        return jsonify(error="Only scheduled orders can be cancelled."), 409
+    if order.status != AWAITING_PICKUP_STATUS:
+        return jsonify(
+            error="Only orders awaiting pickup can be cancelled."
+        ), 409
 
     order.status = "Cancelled"
     order.save()
