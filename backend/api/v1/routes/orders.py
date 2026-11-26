@@ -3,7 +3,7 @@
 from flask import request, jsonify
 from flask_login import login_required, current_user
 from . import orders_bp
-from backend.models.order import Order
+from models.order import Order
 from models import storage
 from datetime import date, datetime, timezone
 
