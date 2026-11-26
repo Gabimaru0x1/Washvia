@@ -9,6 +9,7 @@ from datetime import date, datetime, timezone
 
 
 ADMIN_ACCESS_ERROR = "Admin access required."
+ORDER_NOT_FOUND_ERROR = "Order not found."
 
 
 def order_response(order):
@@ -96,7 +97,7 @@ def mark_order_picked_up(order_id):
 
     order = storage.get(ServiceReq, order_id)
     if order is None:
-        return jsonify(error="Order not found."), 404
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
 
     if order.status != "scheduled":
         return jsonify(
@@ -118,15 +119,9 @@ def start_service(order_id):
     if current_user.role != "admin":
         return jsonify(error=ADMIN_ACCESS_ERROR), 403
 
-    data = request.get_json()
-    status = data.get("status")
-
-    if not isinstance(status, str):
-        return jsonify(error="Enter a valid status update.")
-
     order = storage.get(ServiceReq, order_id)
     if order is None:
-        return jsonify(error="Order not found."), 404
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
 
     if order.status != "scheduled":
         return jsonify(
@@ -134,6 +129,77 @@ def start_service(order_id):
         ), 409
 
     order.status = "In progress"
+    order.save()
+
+    return jsonify(order_response(order)), 200
+
+
+@orders_bp.route(
+    '/orders/admin/<order_id>/ready', methods=['PATCH'], strict_slashes=False
+)
+@login_required
+def service_ready(order_id):
+    if current_user.role != "admin":
+        return jsonify(error=ADMIN_ACCESS_ERROR), 403
+
+    order = storage.get(ServiceReq, order_id)
+    if order is None:
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
+
+    if order.status != "In progress":
+        return jsonify(
+            error="Only started orders can be marked ready"
+        ), 409
+
+    order.status = "Ready"
+    order.save()
+
+    return jsonify(order_response(order)), 200
+
+
+@orders_bp.route(
+    '/orders/admin/<order_id>/delivered',
+    methods=['PATCH'],
+    strict_slashes=False,
+)
+@login_required
+def service_delivered(order_id):
+    if current_user.role != "admin":
+        return jsonify(error=ADMIN_ACCESS_ERROR), 403
+
+    order = storage.get(ServiceReq, order_id)
+    if order is None:
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
+
+    if order.status != "Ready":
+        return jsonify(
+            error="Only ready orders can be marked delivered"
+        ), 409
+
+    order.status = "Delivered"
+    order.save()
+
+    return jsonify(order_response(order)), 200
+
+
+@orders_bp.route(
+    '/orders/admin/<order_id>/cancel',
+    methods=["PATCH"],
+    strict_slashes=False,
+)
+@login_required
+def cancel_order(order_id):
+    if current_user.role != "admin":
+        return jsonify(error=ADMIN_ACCESS_ERROR), 403
+
+    order = storage.get(ServiceReq, order_id)
+    if order is None:
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
+
+    if order.status != "scheduled":
+        return jsonify(error="Only scheduled orders can be cancelled."), 409
+
+    order.status = "Cancelled"
     order.save()
 
     return jsonify(order_response(order)), 200
