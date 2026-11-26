@@ -156,3 +156,17 @@ class DBStorage:
             )
             .all()
         )
+
+    def get_all_orders(self):
+        """Return all customers order"""
+        session = self.__session
+        if session is None:
+            return []
+        return (
+            session.query(ServiceReq)
+            .order_by(
+                ServiceReq.__table__.c.created_at.desc(),
+                ServiceReq.__table__.c.id.desc(),
+            )
+            .all()
+        )
