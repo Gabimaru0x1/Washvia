@@ -4,7 +4,7 @@ from flask import Blueprint
 
 auth_bp = Blueprint('auth', __name__,  url_prefix="/api/v1/auth")
 dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/api/v1/users')
-orders_bp = Blueprint('orders', __name__, url_prefix='/api/v1/user')
+orders_bp = Blueprint('orders', __name__, url_prefix='/api/v1/')
 
 # Import routes to register them with the blueprint
 from .auth import *  # noqa: E402
