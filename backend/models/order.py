@@ -25,7 +25,7 @@ class Order(BaseModel, Base):
     status = Column(String(20), default="scheduled", nullable=False)
     picked_up_on = Column(DateTime, nullable=True)
     delivered_on = Column(DateTime, nullable=True)
-    user = relationship("User", back_populates="service_requests")
+    user = relationship("User", back_populates="orders")
 
     def __init__(self, *args, **kwargs):
         """Initialize a User or restore its attributes from keyword
