@@ -24,7 +24,7 @@ def signup():
     """Handle signup requests and create a Washvia user account."""
     if current_user.is_authenticated:
         # Redirect to a dashboard or home page if already logged in.
-        return redirect(url_for('dashboard.dashboard'))
+        return redirect(url_for('dashboard.get_current_user'))
 
     data = request.get_json()
     if not data:
