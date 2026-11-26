@@ -24,7 +24,7 @@ class User(BaseModel, Base, UserMixin):
     last_name = Column(String(128), nullable=True)
     address = Column(String(256), nullable=True)
     phone_number = Column(String(20), nullable=True)
-    service_requests = relationship("ServiceReq", back_populates="user")
+    orders = relationship("Order", back_populates="user")
     role = Column(String(20), nullable=False, server_default="customer")
 
     def __init__(self, *args, **kwargs):
