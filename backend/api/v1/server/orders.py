@@ -56,3 +56,13 @@ def list_orders():
     orders = storage.get_orders_for_user(current_user.id)
 
     return jsonify([order_response(order) for order in orders])
+
+
+@orders_bp.route('/orders/admin', methods=['GET'], strict_slashes=False)
+@login_required
+def list_admin_orders():
+    if current_user.role != "admin":
+        return jsonify(error="Admin access required."), 403
+
+    orders = storage.get_all_orders()
+    return jsonify([order_response(order) for order in orders])
