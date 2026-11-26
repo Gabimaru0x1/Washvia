@@ -3,7 +3,7 @@
 
 import os
 from flask import Flask, jsonify
-from api.v1.server import auth_bp, dashboard_bp, orders_bp
+from api.v1.routes import auth_bp, dashboard_bp, orders_bp
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect, CSRFError
 
