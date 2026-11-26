@@ -40,6 +40,7 @@ def create_order():
     user_id = current_user.id
     service = data.get("service")
     address = data.get("pickup_address")
+    status = "Awaiting pickup"
 
     if not address:
         return jsonify({'error': 'Enter a pick up address'})
@@ -47,7 +48,8 @@ def create_order():
     order = Order(
         user_id=user_id,
         service=service,
-        pickup_address=address
+        pickup_address=address,
+        status=status
     )
     order.save()
 
@@ -74,7 +76,9 @@ def list_admin_orders():
 
 
 @orders_bp.route(
-    '/orders/admin/<order_id>/pickup', methods=['PATCH'], strict_slashes=False
+    '/orders/admin/<order_id>/picked_up',
+    methods=['PATCH'],
+    strict_slashes=False,
 )
 @login_required
 def mark_order_picked_up(order_id):
@@ -99,9 +103,9 @@ def mark_order_picked_up(order_id):
     if order is None:
         return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
 
-    if order.status != "scheduled":
+    if order.status != "Awaiting pickup":
         return jsonify(
-            error="Only scheduled orders can be marked picked up."
+            error="Only orders awaiting pickup can be marked picked up."
         ), 409
 
     order.picked_up_on = picked_up_on
@@ -112,7 +116,32 @@ def mark_order_picked_up(order_id):
 
 
 @orders_bp.route(
-    '/orders/admin/<order_id>/pickup', methods=['PATCH'], strict_slashes=False
+    '/orders/admin/<order_id>/schedule',
+    methods=['PATCH'],
+    strict_slashes=False,
+)
+@login_required
+def schedule_service(order_id):
+    if current_user.role != "admin":
+        return jsonify(error=ADMIN_ACCESS_ERROR), 403
+
+    order = storage.get(Order, order_id)
+    if order is None:
+        return jsonify(error=ORDER_NOT_FOUND_ERROR), 404
+
+    if order.status != "picked_up":
+        return jsonify(
+            error="Only picked-up orders can be scheduled."
+        ), 409
+
+    order.status = "scheduled"
+    order.save()
+
+    return jsonify(order_response(order)), 200
+
+
+@orders_bp.route(
+    '/orders/admin/<order_id>/start', methods=['PATCH'], strict_slashes=False
 )
 @login_required
 def start_service(order_id):
