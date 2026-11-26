@@ -7,7 +7,7 @@ from os import getenv
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
-from models.service_req import ServiceReq
+from backend.models.order import Order
 
 
 class DBStorage:
@@ -148,11 +148,11 @@ class DBStorage:
         if session is None:
             return []
         return (
-            session.query(ServiceReq)
+            session.query(Order)
             .filter_by(user_id=user_id)
             .order_by(
-                ServiceReq.__table__.c.created_at.desc(),
-                ServiceReq.__table__.c.id.desc(),
+                Order.__table__.c.created_at.desc(),
+                Order.__table__.c.id.desc(),
             )
             .all()
         )
@@ -163,10 +163,10 @@ class DBStorage:
         if session is None:
             return []
         return (
-            session.query(ServiceReq)
+            session.query(Order)
             .order_by(
-                ServiceReq.__table__.c.created_at.desc(),
-                ServiceReq.__table__.c.id.desc(),
+                Order.__table__.c.created_at.desc(),
+                Order.__table__.c.id.desc(),
             )
             .all()
         )
