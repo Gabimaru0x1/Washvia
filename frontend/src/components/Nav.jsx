@@ -34,7 +34,7 @@ const Nav = () => {
   const usePrimaryColor = menuOpen || menuClosing;
 
   return (
-    <nav className="fixed z-1 inset-x-4 py-5 flex items-center justify-between">
+    <nav className="fixed z-1 inset-x-4 md:inset-x-8 py-5 flex items-center justify-between">
       <a
         href="/"
         onClick={closeMenu}
