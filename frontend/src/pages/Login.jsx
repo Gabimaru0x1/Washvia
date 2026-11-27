@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "../services/authService";
+import { login } from "../services/auth";
 import AuthFields from "../components/AuthFields";
 import Button from "../components/Button";
 import { validateForm } from "../utils/validateForm";
