@@ -1,18 +1,19 @@
 import { useId, useState } from "react";
-import { FiPhone } from "react-icons/fi";
-import { signup } from "../services/authService";
+import { FiUser } from "react-icons/fi";
+import { signup } from "../services/auth";
 import AuthFields from "../components/AuthFields";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import { validateForm } from "../utils/validateForm";
 
 const MIN_PASSWORD_LENGTH = 6;
-const PHONE_PATTERN = /^[0-9]{11}$/;
+const PHONE_PATTERN = /^\d{11}$/;
 
 export default function Signup({ onClose, onSwitchMode }) {
   const id = useId();
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsVisible, setPasswordsVisible] = useState(false);
@@ -21,14 +22,14 @@ export default function Signup({ onClose, onSwitchMode }) {
   const [success, setSuccess] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
-  const isPhoneValid = PHONE_PATTERN.test(phoneNumber);
+  // const isPhoneValid = PHONE_PATTERN.test(phoneNumber);
   const isPasswordTooShort = password.length < MIN_PASSWORD_LENGTH;
   const passwordsMatch = password === confirmPassword;
 
-  const phoneError =
-    phoneNumber.length > 0 && !isPhoneValid
-      ? "Phone number must be exactly 11 digits."
-      : "";
+  // const phoneError =
+  //   phoneNumber.length > 0 && !isPhoneValid
+  //     ? "Phone number must be exactly 11 digits."
+  //     : "";
 
   const passwordError =
     password.length > 0 && isPasswordTooShort
@@ -38,6 +39,11 @@ export default function Signup({ onClose, onSwitchMode }) {
   const confirmPasswordError =
     confirmPassword.length > 0 && !passwordsMatch
       ? "Passwords do not match."
+      : "";
+
+  const firstNameError =
+    firstName.length > 0 && firstName.trim() === ""
+      ? "Enter your first name."
       : "";
 
   function togglePasswords() {
@@ -68,7 +74,7 @@ export default function Signup({ onClose, onSwitchMode }) {
     try {
       await signup({
         email,
-        phone_number: phoneNumber,
+        // phone_number: phoneNumber,
         password,
       });
 
@@ -83,7 +89,7 @@ export default function Signup({ onClose, onSwitchMode }) {
   }
 
   return (
-    <section className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[80%] bg-white rounded-lg">
+    <section className="relative flex-center flex-col lg:w-lg md:w-md w-sm h-[90%] bg-white rounded-lg">
       <Button
         type="button"
         onClick={onClose}
@@ -109,9 +115,7 @@ export default function Signup({ onClose, onSwitchMode }) {
       </div>
 
       {success ? (
-        <p role="status" className="mb-3 text-green-500 text-[13px]">
-          {success}
-        </p>
+        <output className="mb-3 text-green-500 text-[13px]">{success}</output>
       ) : (
         <form
           noValidate
@@ -120,6 +124,20 @@ export default function Signup({ onClose, onSwitchMode }) {
           className="mx-auto w-full max-w-xs"
         >
           <div className="mb-5 space-y-3">
+            <InputField
+              id={`${id}-first-name`}
+              htmlFor={`${id}-first-name`}
+              name="firstName"
+              type="text"
+              autoComplete="text"
+              value={firstName}
+              onChange={(event) => setFirstName(event.target.value)}
+              placeholder="First name"
+              error={fieldErrors.firstName || firstNameError}
+              icon={FiUser}
+              required
+            />
+
             <AuthFields
               email={email}
               setEmail={setEmail}
@@ -132,7 +150,7 @@ export default function Signup({ onClose, onSwitchMode }) {
               isSignup
             />
 
-            <InputField
+            {/* <InputField
               id={`${id}-phone`}
               htmlFor={`${id}-phone`}
               name="phone_number"
@@ -145,7 +163,7 @@ export default function Signup({ onClose, onSwitchMode }) {
               icon={FiPhone}
               error={fieldErrors.phone_number || phoneError}
               required
-            />
+            /> */}
 
             <InputField
               id={`${id}-confirm-password`}
@@ -162,7 +180,6 @@ export default function Signup({ onClose, onSwitchMode }) {
               required
             />
           </div>
-
           <Button
             type="submit"
             disabled={isSubmitting}
