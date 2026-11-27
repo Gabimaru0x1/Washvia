@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { logout } from "../services/authService.js";
+import { logout } from "../services/auth.js";
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null);
@@ -13,7 +13,7 @@ export default function Dashboard() {
 
     async function loadProfile() {
       try {
-        const response = await fetch("/api/v1/user/dashboard", {
+        const response = await fetch("/api/v1/users/me", {
           credentials: "include",
           signal: controller.signal,
         });
@@ -60,7 +60,7 @@ export default function Dashboard() {
   }
 
   if (status === "signed-out") {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (status === "loading") {
@@ -75,7 +75,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <h1>{firstName ? `Welcome back, ${firstName}!` : "Welcome back!"}</h1>
+      <h1>{`Hello, ${firstName}!`}</h1>
 
       <button type="button" onClick={handleLogout} disabled={isLoggingOut}>
         {isLoggingOut ? "Logging out…" : "Log out"}
